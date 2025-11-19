@@ -1,3 +1,8 @@
-export default function Main() {
-    return <div>Hey</div>
+import "../globals.css";
+import LinkedListVisualizer from "@/component/dsa/linkedlist/LinkedListVisualizer";
+
+export default function DSAPage() {    
+    return <div>
+        <LinkedListVisualizer />
+    </div>
 }
