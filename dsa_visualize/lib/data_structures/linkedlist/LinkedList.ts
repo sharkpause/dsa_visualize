@@ -1,4 +1,4 @@
-class ListNode {
+export class ListNode {
     value: number;
     next: ListNode | null;
 
@@ -8,7 +8,7 @@ class ListNode {
     }
 }
 
-class LinkedList {
+export class LinkedList {
     head: ListNode | null;
     tail: ListNode | null;
     
