@@ -14,25 +14,27 @@ function makeSampleLinkedList(): LinkedList {
     return list;
 }
 
-function handlePlusButtonClick() {
-
-}
-
 export default function LinkedListVisualizer() {
     const [sampleLinkedList, setSampleLinkedList] = useState(() => makeSampleLinkedList());
-    const sampleLinkedListArray: number[] = sampleLinkedList.to_array();
     
+    function handlePlusButtonClick() {
+        const clonedList = sampleLinkedList.clone();
+        clonedList.add_node(Math.floor(Math.random() * 100));
+        
+        setSampleLinkedList(clonedList);
+    }
+
     return <div>
         <div>
             {
-                sampleLinkedListArray.map((value, idx) => (
+                sampleLinkedList.to_array().map((value, idx) => (
                     <span key={idx}>
-                        {value}
+                        <span>{value}</span>
                         {' → '}
                     </span>
                 ))
             }
-            <button className="cursor-pointer bg-sky-950" onClick={handlePlusButtonClick}>
+            <button className="cursor-pointer border-solid border-black outline p-1" onClick={handlePlusButtonClick}>
                 +
             </button>
         </div>

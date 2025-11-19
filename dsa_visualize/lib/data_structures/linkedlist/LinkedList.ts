@@ -46,6 +46,17 @@ export class LinkedList {
 
         return 0;
     }
+
+    clone() {
+        const newList: LinkedList = new LinkedList();
+        const currentList: number[] = this.to_array();
+
+        for(let value of currentList) {
+            newList.add_node(value);
+        }
+
+        return newList;
+    }
 }
 
 
