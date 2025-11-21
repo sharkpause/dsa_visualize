@@ -1,12 +1,24 @@
+'use client';
+
+import { useState } from "react";
 import "../globals.css";
 import LinkedListVisualizer from "@/component/dsa/linkedlist/LinkedListVisualizer";
 
-export default function DSAPage() {    
-    return <div>
-        <div className="flex h-screen">
-            <aside className="w-64 bg-gray-800 text-white p-4 hidden md:block">
+export default function DSAPage() {
+    const [open, setOpen] = useState(false);
 
-            </aside>
+    return <div>
+        <div className="flex">
+            <div className="relative">
+                <button
+                    onClick={() => setOpen(!open)}
+                    className="absolute m-4 z-50"
+                >
+                    ☰
+                </button>
+                <aside className={`${open ? "translate-x-0" : "-translate-x-full"} h-screen w-64 bg-gray-100 transform transition-transform duration-300`}>
+                </aside>
+            </div>
 
             <main className="flex-1 p-6">
                 <LinkedListVisualizer />
