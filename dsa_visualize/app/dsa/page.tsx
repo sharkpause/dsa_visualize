@@ -3,6 +3,14 @@ import LinkedListVisualizer from "@/component/dsa/linkedlist/LinkedListVisualize
 
 export default function DSAPage() {    
     return <div>
-        <LinkedListVisualizer />
+        <div className="flex h-screen">
+            <aside className="w-64 bg-gray-800 text-white p-4 hidden md:block">
+
+            </aside>
+
+            <main className="flex-1 p-6">
+                <LinkedListVisualizer />
+            </main>
+        </div>
     </div>
 }
