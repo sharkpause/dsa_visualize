@@ -66,13 +66,66 @@ export class LinkedList {
         if(this.head == null || index >= this.length) {
             return 1;
         }
+        if(this.length == 1) {
+            this.head = null
+            this.tail = null
+            
+            return 0;
+        }
+        if(index == 0) {
+            this.head = this.head.next;
+
+            return 0;
+        }
+        
+        let currentNode: ListNode | null = this.head;
+        let i = 0;
+        
+        while(i < index-1) {
+            currentNode = currentNode!.next;
+        
+            i++;
+        }
+        
+        if(currentNode!.next!.next == null) {
+            currentNode!.next = null;
+            this.tail = currentNode;
+        } else {
+            currentNode!.next = currentNode!.next!.next;
+            this.tail = currentNode!.next;
+        }
+
+        return 0;
+    }
+
+    edit_at(index: number, newValue: number) {
+        if(this.head == null || index >= this.length) {
+            return 1;
+        }
+        if(this.length == 1) {
+            this.head.value = newValue;
+            this.tail!.value = newValue;
+            
+            return 0;
+        }
+        if(index == 0) {
+            this.head.value = newValue;
+
+            return 0;
+        }
         
         let currentNode: ListNode | null = this.head;
         let i = 0;
         
         while(i < index) {
-            currentNode = currentNode!.next
+            currentNode = currentNode!.next;
+        
+            i++;
         }
+        
+        currentNode!.value = newValue;
+
+        return 0;
     }
 }
 

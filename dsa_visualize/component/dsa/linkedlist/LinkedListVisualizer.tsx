@@ -24,15 +24,16 @@ export default function LinkedListVisualizer() {
         setSampleLinkedList(clonedList);
     }
 
-    function handleEditButtonClick(index: number) {
+    function handleEditButtonClick(index: number, newValue: number) {
         const clonedList = list.clone();
-        alert(index)
+        clonedList.edit_at(index, newValue);
+        setSampleLinkedList(clonedList);
     }
 
     function handleDeleteButtonClick(index: number) {
         const clonedList = list.clone();
-        alert(index);
-        // clonedList.delete_node()
+        clonedList.delete_at(index);
+        setSampleLinkedList(clonedList);
     }
 
     return <div>
@@ -45,7 +46,7 @@ export default function LinkedListVisualizer() {
                       </div>
 
                       <div className="mt-3 absolute bg-gray-100 p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onClick={() => handleEditButtonClick(idx)} className="py-1">Edit</button>
+                        <button onClick={() => handleEditButtonClick(idx, 99)} className="py-1">Edit</button>
                         <button onClick={() => handleDeleteButtonClick(idx)} className="py-1 text-red-600">Delete</button>
                       </div>
                     </div>
