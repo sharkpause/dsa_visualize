@@ -20,7 +20,7 @@ export class LinkedList {
     }
 
     to_array(): number[] { // TODO: Turn this to return a node objecct instead of just the value
-        if(this.head == null) {
+        if(this.head === null) {
             return []
         }
 
@@ -38,7 +38,7 @@ export class LinkedList {
     add_node(value: number): number {
         this.length++;
         
-        if(this.head == null) {
+        if(this.head === null) {
             this.head = new ListNode(value)
             this.tail = this.head
 
@@ -63,16 +63,16 @@ export class LinkedList {
     }
 
     delete_at(index: number) {
-        if(this.head == null || index >= this.length) {
+        if(this.head === null || index >= this.length) {
             return 1;
         }
-        if(this.length == 1) {
+        if(this.length === 1) {
             this.head = null
             this.tail = null
             
             return 0;
         }
-        if(index == 0) {
+        if(index === 0) {
             this.head = this.head.next;
 
             return 0;
@@ -87,7 +87,7 @@ export class LinkedList {
             i++;
         }
         
-        if(currentNode!.next!.next == null) {
+        if(currentNode!.next!.next === null) {
             currentNode!.next = null;
             this.tail = currentNode;
         } else {
@@ -99,16 +99,16 @@ export class LinkedList {
     }
 
     edit_at(index: number, newValue: number) {
-        if(this.head == null || index >= this.length) {
+        if(this.head === null || index >= this.length) {
             return 1;
         }
-        if(this.length == 1) {
+        if(this.length === 1) {
             this.head.value = newValue;
             this.tail!.value = newValue;
             
             return 0;
         }
-        if(index == 0) {
+        if(index === 0) {
             this.head.value = newValue;
 
             return 0;
