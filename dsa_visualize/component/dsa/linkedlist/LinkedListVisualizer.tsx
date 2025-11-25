@@ -1,60 +1,35 @@
 'use client';
 
-import { useState } from 'react';
+export function generateLinkedListFlow(list: LinkedList, offsetX = 0, offsetY = 0) {
+  const values = list.toArray();
 
-import { LinkedList } from '@/lib/data_structures/linkedlist/LinkedList';
+  const nodes = values.map((value, index) => ({
+    id: `ll-${crypto.randomUUID()}`,
+    position: { x: offsetX + index * 150, y: offsetY },
+    type: 'linkedlistnode',
+    data: { value }
+  }));
 
-function makeSampleLinkedList(): LinkedList {
-    const list: LinkedList = new LinkedList();
-    
-    for(let i = 10; i <= 30; i += 10) {
-        list.add_node(i);
-    }
+  const edges = nodes.slice(0, -1).map((node, index) => ({
+    id: `ll-edge-${crypto.randomUUID()}`,
+    source: node.id,
+    target: nodes[index + 1].id,
+    type: 'smoothstep'
+  }));
 
-    return list;
+  return { nodes, edges };
 }
 
-export default function LinkedListVisualizer() {
-    const [list, setSampleLinkedList] = useState(() => makeSampleLinkedList());
-    
-    function handlePlusButtonClick() {
-        const clonedList = list.clone();
-        clonedList.add_node(Math.floor(Math.random() * 100));
-        
-        setSampleLinkedList(clonedList);
-    }
-
-    function handleEditButtonClick(index: number, newValue: number) {
-        const clonedList = list.clone();
-        clonedList.edit_at(index, newValue);
-        setSampleLinkedList(clonedList);
-    }
-
-    function handleDeleteButtonClick(index: number) {
-        const clonedList = list.clone();
-        clonedList.delete_at(index);
-        setSampleLinkedList(clonedList);
-    }
-
-    return <div>
-        <div>
-            {
-                list.to_array().map((value, idx) => (
-                    <div key={idx} className="group relative inline-block">
-                      <div className="px-4 py-2 bg-white border rounded-md shadow-sm">
-                        {value}
-                      </div>
-
-                      <div className="mt-3 absolute bg-gray-100 p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button onClick={() => handleEditButtonClick(idx, 99)} className="py-1">Edit</button>
-                        <button onClick={() => handleDeleteButtonClick(idx)} className="py-1 text-red-600">Delete</button>
-                      </div>
-                    </div>
-                ))
-            }
-            <button className="cursor-pointer border-solid border-black outline p-1" onClick={handlePlusButtonClick}>
-                +
-            </button>
-        </div>
-    </div>
+export function LinkedListNode({ data, selected }) {
+	return (
+		<div
+			className={`
+				bg-blue-500 text-white px-3 py-2 rounded-md flex items-center gap-2
+				transition-all
+				${selected ? 'ring-2 ring-white' : ''}
+			`}
+		>
+			<span>{data.value}</span>
+		</div>
+	)
 }

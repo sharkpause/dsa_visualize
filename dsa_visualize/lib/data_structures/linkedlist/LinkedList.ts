@@ -19,23 +19,23 @@ export class LinkedList {
         this.tail = head;
     }
 
-    to_array(): number[] { // TODO: Turn this to return a node objecct instead of just the value
+    toArray(): ListNode[] {
         if(this.head === null) {
             return []
         }
 
-        const arr: number[] = [this.head.value]
+        const arr: ListNode[] = [this.head]
         let currentNode: ListNode = this.head
 
         while(currentNode.next != null) {
             currentNode = currentNode.next
-            arr.push(currentNode.value)
+            arr.push(currentNode)
         }
 
         return arr;
     }
 
-    add_node(value: number): number {
+    addNode(value: number): number {
         this.length++;
         
         if(this.head === null) {
@@ -53,16 +53,16 @@ export class LinkedList {
 
     clone() {
         const newList: LinkedList = new LinkedList();
-        const currentList: number[] = this.to_array();
+        const currentList: number[] = this.toArray();
 
         for(let value of currentList) {
-            newList.add_node(value);
+            newList.addNode(value);
         }
 
         return newList;
     }
 
-    delete_at(index: number) {
+    deleteAt(index: number) {
         if(this.head === null || index >= this.length) {
             return 1;
         }
@@ -98,7 +98,7 @@ export class LinkedList {
         return 0;
     }
 
-    edit_at(index: number, newValue: number) {
+    editAt(index: number, newValue: number) {
         if(this.head === null || index >= this.length) {
             return 1;
         }
