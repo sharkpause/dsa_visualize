@@ -46,7 +46,6 @@ export default function FlowCanvas() {
 				const absX = Math.abs(deltaX);
 				const absY = Math.abs(deltaY);
 
-				// If vertical distance dominates
 				if (absY > absX) {
 					if (deltaY > 0) {
 						newSourceHandle = 'bottom';
@@ -56,7 +55,6 @@ export default function FlowCanvas() {
 						newTargetHandle = 'bottom';
 					}
 				} else {
-					// Horizontal dominates (or ties)
 					if (deltaX > 0) {
 						newSourceHandle = 'right';
 						newTargetHandle = 'left';
