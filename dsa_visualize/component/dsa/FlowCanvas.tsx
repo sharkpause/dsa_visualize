@@ -10,6 +10,7 @@ import ReactFlow, {
   Connection,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
+import { applyNodeChanges } from 'reactflow';
 
 import { LinkedList } from '@/lib/data_structures/linkedlist/LinkedList';
 
@@ -24,6 +25,60 @@ export default function FlowCanvas() {
 
 	const [nodes, setNodes, onNodesChange] = useNodesState([]);
 	const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+
+	const handleNodesChange = (changes) => {
+		const updatedNodes = applyNodeChanges(changes, nodes);
+		onNodesChange(changes);
+
+		setEdges(prevEdges =>
+			prevEdges.map(edge => {
+				const sourceNode = updatedNodes.find(n => n.id == edge.source);
+				const targetNode = updatedNodes.find(n => n.id == edge.target);
+
+				if(!sourceNode || !targetNode) return edge;
+
+				const deltaY = targetNode.position.y - sourceNode.position.y;
+				const deltaX = targetNode.position.x - sourceNode.position.x;
+
+				let newSourceHandle: 'top' | 'bottom' | 'left' | 'right';
+				let newTargetHandle: 'top' | 'bottom' | 'left' | 'right';
+
+				const absX = Math.abs(deltaX);
+				const absY = Math.abs(deltaY);
+
+				// If vertical distance dominates
+				if (absY > absX) {
+					if (deltaY > 0) {
+						newSourceHandle = 'bottom';
+						newTargetHandle = 'top';
+					} else {
+						newSourceHandle = 'top';
+						newTargetHandle = 'bottom';
+					}
+				} else {
+					// Horizontal dominates (or ties)
+					if (deltaX > 0) {
+						newSourceHandle = 'right';
+						newTargetHandle = 'left';
+					} else {
+						newSourceHandle = 'left';
+						newTargetHandle = 'right';
+					}
+				}
+			
+			//	if(targetNode.position.y < sourceNode.position.y) {
+			//		newTargetHandle = 'bottom';
+			//	} else if(targetNode.position.y > sourceNode.position.y) {
+			//		newTargetHandle = 'top';
+			//	}
+
+				//const newSourceHandle = sourceNode.position.y > targetNode.position.y ? 'top' : 'bottom';
+				//const newTargetHandle = targetNode.position.y < sourceNode.position.y ? 'bottom' : 'top';
+
+				return { ...edge, sourceHandle: newSourceHandle, targetHandle: newTargetHandle };
+			})
+		)
+	}
 
 	const addLinkedList = () => {
 		const sampleLinkedList = new LinkedList();
@@ -68,7 +123,7 @@ export default function FlowCanvas() {
 					className="w-full h-full"
 					nodes={nodes}
 					edges={edges}
-					onNodesChange={onNodesChange}
+					onNodesChange={handleNodesChange}
 					onEdgesChange={onEdgesChange}
 					nodeTypes={nodeTypes}
 					fitView

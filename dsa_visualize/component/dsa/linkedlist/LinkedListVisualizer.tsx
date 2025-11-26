@@ -44,10 +44,15 @@ export function LinkedListNode({ data, selected }) {
 				${selected ? 'ring-2 ring-white' : ''}
 			`}
 		>
-			<Handle type="source" position={Position.Right} id="right" />
-			<Handle type="source" position={Position.Bottom} id="bottom" />
-			<Handle type="target" position={Position.Left} id="left" />
+			<Handle type="source" position={Position.Top} id="top" />
 			<Handle type="target" position={Position.Top} id="top" />
+			<Handle type="source" position={Position.Right} id="right" />
+			<Handle type="target" position={Position.Right} id="right" />
+			<Handle type="source" position={Position.Bottom} id="bottom" />
+			<Handle type="target" position={Position.Bottom} id="bottom" />
+			<Handle type="source" position={Position.Left} id="left" />
+			<Handle type="target" position={Position.Left} id="left" />
+
 			<span>{data.value}</span>
 		</div>
 	)
