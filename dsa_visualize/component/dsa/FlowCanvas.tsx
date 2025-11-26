@@ -15,10 +15,11 @@ import { LinkedList } from '@/lib/data_structures/linkedlist/LinkedList';
 
 import { LinkedListNode, generateLinkedListFlow } from './linkedlist/LinkedListVisualizer';
 
+const nodeTypes = {
+	linkedlistnode: LinkedListNode
+}
+
 export default function FlowCanvas() {
-	const nodeTypes = {
-		linkedlistnode: LinkedListNode
-	}
 	const [open, setOpen] = useState(false);
 
 	const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -38,10 +39,10 @@ export default function FlowCanvas() {
 
 	return (
 		<div className="w-full h-screen relative">
-			<div className="absolute z-50">
+			<div className="absolute z-49">
 				<button
 					onClick={() => setOpen(!open)}
-					className="absolute top-4 left-4 z-100"
+					className="absolute top-4 left-4 z-50"
 				>
 					☰
 				</button>
