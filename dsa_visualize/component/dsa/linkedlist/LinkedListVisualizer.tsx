@@ -1,13 +1,15 @@
 'use client';
 
+import { LinkedList } from '@/lib/data_structures/linkedlist/LinkedList';
+
 export function generateLinkedListFlow(list: LinkedList, offsetX = 0, offsetY = 0) {
   const values = list.toArray();
 
-  const nodes = values.map((value, index) => ({
+  const nodes = values.map((node, index) => ({
     id: `ll-${crypto.randomUUID()}`,
     position: { x: offsetX + index * 150, y: offsetY },
     type: 'linkedlistnode',
-    data: { value }
+    data: { value: node.value }
   }));
 
   const edges = nodes.slice(0, -1).map((node, index) => ({
