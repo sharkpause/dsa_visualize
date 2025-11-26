@@ -13,15 +13,24 @@ export function generateLinkedListFlow(list: LinkedList, offsetX = 0, offsetY = 
 		data: { value: node.value }
 	}));
 
-	const edges = nodes.slice(0, -1).map((node, index) => ({
-		id: `ll-edge-${crypto.randomUUID()}`,
-		source: node.id,
-		target: nodes[index + 1].id,
-		type: 'smoothstep',
-		markerEnd: {
-			type: MarkerType.ArrowClosed,
-		}
-	}));
+	const edges = nodes.slice(0, -1).map((node, index) => {
+		const nextNode = nodes[index + 1];
+
+		const sourcePos = node.position.y < nextNode.position.y ? Position.Bottom : Position.Right;
+		const targetPos = node.position.y < nextNode.position.y ? Position.Top : Position.Left;
+
+		return {
+			id: `ll-edge-${crypto.randomUUID()}`,
+			source: node.id,
+			target: nextNode.id,
+			type: 'straight',
+			markerEnd: {
+				type: MarkerType.ArrowClosed,
+			},
+			sourceHandle: sourcePos,
+			targetHandle: targetPos
+		};
+	});
 
 	return { nodes, edges };
 }
@@ -35,9 +44,11 @@ export function LinkedListNode({ data, selected }) {
 				${selected ? 'ring-2 ring-white' : ''}
 			`}
 		>
-			<Handle type="source" position={Position.Right} />
+			<Handle type="source" position={Position.Right} id="right" />
+			<Handle type="source" position={Position.Bottom} id="bottom" />
+			<Handle type="target" position={Position.Left} id="left" />
+			<Handle type="target" position={Position.Top} id="top" />
 			<span>{data.value}</span>
-			<Handle type="target" position={Position.Left} />
 		</div>
 	)
 }
