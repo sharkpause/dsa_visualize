@@ -35,20 +35,20 @@ export class LinkedList {
         return arr;
     }
 
-    addNode(value: number): number {
+    addNode(value: number) {
         this.length++;
         
         if(this.head === null) {
             this.head = new ListNode(value)
             this.tail = this.head
 
-            return 0;
+            return this.tail;
         }
 
         this.tail!.next = new ListNode(value);
         this.tail = this.tail!.next
 
-        return 0;
+        return this.tail;
     }
 
     clone() {
@@ -127,6 +127,31 @@ export class LinkedList {
 
         return 0;
     }
+
+	getAt(index: number) {
+		if(this.head === null || index >= this.lenth) {
+			return null;
+		}
+
+		if(this.length === 1) {
+			return this.head;
+		}
+
+		if(index === this.length -1) {
+			return this.tail;
+		}
+
+		let currentNode: ListNode | null = this.head;
+		let i = 0;
+
+		while(i < index) {
+			currentNode = currentNode!.next;
+
+			i++;
+		}
+
+		return currentNode;
+	}
 }
 
 

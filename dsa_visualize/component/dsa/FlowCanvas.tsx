@@ -15,14 +15,18 @@ import { applyNodeChanges } from 'reactflow';
 import { LinkedList } from '@/lib/data_structures/linkedlist/LinkedList';
 
 import { LinkedListNode, generateLinkedListFlow } from './linkedlist/LinkedListVisualizer';
+import AddNode from './AddNode';
+import { randomInt } from 'crypto';
 
 const nodeTypes = {
-	linkedlistnode: LinkedListNode
+	linkedlistnode: LinkedListNode,
+	addNode: AddNode,
 }
 
 export default function FlowCanvas() {
 	const [open, setOpen] = useState(false);
 
+	const [list, setList] = useState(new LinkedList());
 	const [nodes, setNodes, onNodesChange] = useNodesState([]);
 	const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
@@ -78,13 +82,67 @@ export default function FlowCanvas() {
 		)
 	}
 
+	function addNewLinkedListNode() {
+		const clonedList = list.clone();
+		const newListNode = clonedList.addNode(5);
+		setList(clonedList);
+
+		// Find the LAST real linked list node in ReactFlow
+		const lastRealNode = nodes
+		.filter(n => n.type === "linkedlistnode")
+		.at(-1);
+
+		if (!lastRealNode) return;
+
+		const newNode = {
+			id: newListNode.id,
+			type: "linkedlistnode",
+			data: { value: newListNode.value },
+			position: {
+				x: lastRealNode.position.x + 100,
+				y: lastRealNode.position.y,
+			},
+		};
+		// TODO: implement adding add node button
+		// rebuild the array:
+		// [all real list nodes] + [new node] + [add-node]
+		const withoutAdd = nodes.filter(n => n.id !== "add-node");
+
+		const addNodeButton = {
+			id: "add-node",
+			type: "addNode",
+			data: { onAdd: addNewLinkedListNode },
+			position: {
+				x: newNode.position.x + 100,
+				y: newNode.position.y,
+			}
+		};
+
+		setNodes([...withoutAdd, newNode, addNodeButton]);
+	}
+
+
 	const addLinkedList = () => {
 		const sampleLinkedList = new LinkedList();
 		for(let i = 10; i <= 30; i += 10) {
 			sampleLinkedList.addNode(i);
 		}
 
+		setList(sampleLinkedList);
+
 		const { nodes: newNodes, edges: newEdges } = generateLinkedListFlow(sampleLinkedList, 50, 50);
+
+		newNodes.push({
+			id: 'add-node',
+			type: 'addNode',
+			data: {
+				onAdd: () => addNewLinkedListNode(),
+			},
+			position: {
+				x: newNodes[newNodes.length-1].position.x + 100,
+				y: newNodes[newNodes.length-1].position.y
+			}
+		});
 
 		setNodes(prev => [...prev, ...newNodes]);
 		setEdges(prev => [...prev, ...newEdges]);
