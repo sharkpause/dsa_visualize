@@ -1,55 +1,53 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
+import { useState } from 'react';
+
 import ReactFlow, {
-  Controls,
-  Background,
-  useNodesState,
-  useEdgesState,
-  addEdge,
-  Connection,
+	applyNodeChanges
 } from 'reactflow';
+
 import 'reactflow/dist/style.css';
-import { applyNodeChanges } from 'reactflow';
 
-import { LinkedList } from '@/lib/data_structures/linkedlist/LinkedList';
-
-import { LinkedListNode, generateLinkedListFlow } from './linkedlist/LinkedListVisualizer';
+import useLinkedListFlow from './linkedlist/useLinkedListFlow';
+import LinkedListNode from './linkedlist/LinkedListNode';
 import AddNode from './AddNode';
+import Sidebar from './Sidebar';
 
 const nodeTypes = {
 	linkedlistnode: LinkedListNode,
 	addnode: AddNode,
-}
+};
 
 export default function FlowCanvas() {
 	const [open, setOpen] = useState(false);
 
-	const [list, setList] = useState(new LinkedList());
-	const [nodes, setNodes, onNodesChange] = useNodesState([]);
-	const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+	const {
+		nodes,
+		edges,
+		setNodes,
+		setEdges,
+		addLinkedList,
+	} = useLinkedListFlow([10, 20, 30]);
 
 	const handleNodesChange = (changes) => {
 		const updatedNodes = applyNodeChanges(changes, nodes);
-		onNodesChange(changes);
+
+		setNodes(updatedNodes);
 
 		setEdges(prevEdges =>
 			prevEdges.map(edge => {
-				const sourceNode = updatedNodes.find(n => n.id == edge.source);
-				const targetNode = updatedNodes.find(n => n.id == edge.target);
+				const sourceNode = updatedNodes.find(n => n.id === edge.source);
+				const targetNode = updatedNodes.find(n => n.id === edge.target);
 
-				if(!sourceNode || !targetNode) return edge;
+				if (!sourceNode || !targetNode) return edge;
 
-				const deltaY = targetNode.position.y - sourceNode.position.y;
 				const deltaX = targetNode.position.x - sourceNode.position.x;
+				const deltaY = targetNode.position.y - sourceNode.position.y;
 
 				let newSourceHandle: 'top' | 'bottom' | 'left' | 'right';
 				let newTargetHandle: 'top' | 'bottom' | 'left' | 'right';
 
-				const absX = Math.abs(deltaX);
-				const absY = Math.abs(deltaY);
-
-				if (absY > absX) {
+				if (Math.abs(deltaY) > Math.abs(deltaX)) {
 					if (deltaY > 0) {
 						newSourceHandle = 'bottom';
 						newTargetHandle = 'top';
@@ -66,81 +64,32 @@ export default function FlowCanvas() {
 						newTargetHandle = 'right';
 					}
 				}
-			
+
 				return { ...edge, sourceHandle: newSourceHandle, targetHandle: newTargetHandle };
 			})
-		)
-	}
-
-	function addNewLinkedListNode() {
-		console.log('a');
-	}
-
-	const addLinkedList = () => {
-		const sampleLinkedList = new LinkedList();
-		for(let i = 10; i <= 30; i += 10) {
-			sampleLinkedList.addNode(i);
-		}
-
-		setList(sampleLinkedList);
-
-		const { nodes: newNodes, edges: newEdges } = generateLinkedListFlow(sampleLinkedList, 50, 50);
-
-		newNodes.push({
-			id: 'add-node',
-			type: 'addnode',
-			data: {
-				onAdd: () => addNewLinkedListNode(),
-			},
-			position: {
-				x: newNodes[newNodes.length-1].position.x + 100,
-				y: newNodes[newNodes.length-1].position.y
-			}
-		});
-
-		setNodes(prev => [...prev, ...newNodes]);
-		setEdges(prev => [...prev, ...newEdges]);
-	}
+		);
+	};
 
 	return (
 		<div className="w-full h-screen relative">
-			<div className="absolute z-49">
-				<button
-					onClick={() => setOpen(!open)}
-					className="absolute top-4 left-4 z-50"
-				>
-					☰
-				</button>
-				<aside
-					className={`
-						${open ? "translate-x-0" : "-translate-x-full"} 
-						top-0 left-0
-						h-screen w-64 bg-gray-100 transform transition-transform duration-300
-					`}
-				>
-					<button
-						className="w-full py-2 px-3 bg-gray-700 text-white mt-12"
-						onClick={() => addLinkedList()}
-					>
-						Add LinkedList
-					</button>
-				</aside>
-			</div>
-			<div
-				className="w-full h-full overflow-hidden"
-			>
+			<Sidebar
+				open={open}
+				onToggle={() => setOpen(!open)}
+				onAddLinkedList={addLinkedList}
+			/>
+
+			<div className="w-full h-full overflow-hidden">
 				<ReactFlow
 					className="w-full h-full"
 					nodes={nodes}
 					edges={edges}
 					onNodesChange={handleNodesChange}
-					onEdgesChange={onEdgesChange}
+	//				onEdgesChange={setEdges}
 					nodeTypes={nodeTypes}
 					fitView
-				>
-				</ReactFlow>
+				/>
 			</div>
 		</div>
-	)
+	);
 }
 

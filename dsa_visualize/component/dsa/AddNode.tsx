@@ -1,6 +1,10 @@
 import { Handle, Position } from 'reactflow';
 
-export default function AddNode({ data }) {
+type AddNodeData = {
+	data: { onAdd: () => void };
+}
+
+export default function AddNode({ data }: AddNodeData) {
 	return (
 		<div
 			onClick={data.onAdd}
