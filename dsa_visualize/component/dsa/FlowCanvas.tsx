@@ -67,15 +67,6 @@ export default function FlowCanvas() {
 					}
 				}
 			
-			//	if(targetNode.position.y < sourceNode.position.y) {
-			//		newTargetHandle = 'bottom';
-			//	} else if(targetNode.position.y > sourceNode.position.y) {
-			//		newTargetHandle = 'top';
-			//	}
-
-				//const newSourceHandle = sourceNode.position.y > targetNode.position.y ? 'top' : 'bottom';
-				//const newTargetHandle = targetNode.position.y < sourceNode.position.y ? 'bottom' : 'top';
-
 				return { ...edge, sourceHandle: newSourceHandle, targetHandle: newTargetHandle };
 			})
 		)
