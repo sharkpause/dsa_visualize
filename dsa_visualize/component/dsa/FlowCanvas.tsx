@@ -16,11 +16,10 @@ import { LinkedList } from '@/lib/data_structures/linkedlist/LinkedList';
 
 import { LinkedListNode, generateLinkedListFlow } from './linkedlist/LinkedListVisualizer';
 import AddNode from './AddNode';
-import { randomInt } from 'crypto';
 
 const nodeTypes = {
 	linkedlistnode: LinkedListNode,
-	addNode: AddNode,
+	addnode: AddNode,
 }
 
 export default function FlowCanvas() {
@@ -83,44 +82,8 @@ export default function FlowCanvas() {
 	}
 
 	function addNewLinkedListNode() {
-		const clonedList = list.clone();
-		const newListNode = clonedList.addNode(5);
-		setList(clonedList);
-
-		// Find the LAST real linked list node in ReactFlow
-		const lastRealNode = nodes
-		.filter(n => n.type === "linkedlistnode")
-		.at(-1);
-
-		if (!lastRealNode) return;
-
-		const newNode = {
-			id: newListNode.id,
-			type: "linkedlistnode",
-			data: { value: newListNode.value },
-			position: {
-				x: lastRealNode.position.x + 100,
-				y: lastRealNode.position.y,
-			},
-		};
-		// TODO: implement adding add node button
-		// rebuild the array:
-		// [all real list nodes] + [new node] + [add-node]
-		const withoutAdd = nodes.filter(n => n.id !== "add-node");
-
-		const addNodeButton = {
-			id: "add-node",
-			type: "addNode",
-			data: { onAdd: addNewLinkedListNode },
-			position: {
-				x: newNode.position.x + 100,
-				y: newNode.position.y,
-			}
-		};
-
-		setNodes([...withoutAdd, newNode, addNodeButton]);
+		console.log('a');
 	}
-
 
 	const addLinkedList = () => {
 		const sampleLinkedList = new LinkedList();
@@ -134,7 +97,7 @@ export default function FlowCanvas() {
 
 		newNodes.push({
 			id: 'add-node',
-			type: 'addNode',
+			type: 'addnode',
 			data: {
 				onAdd: () => addNewLinkedListNode(),
 			},

@@ -3,10 +3,17 @@
 import { LinkedList } from '@/lib/data_structures/linkedlist/LinkedList';
 import { MarkerType, Handle, Position } from 'reactflow';
 
+type FlowNode = {
+	id: string;
+	position: { x: number, y: number };
+	type: 'linkedlistnode' | 'addnode';
+	data: { value: number } | { onAdd: () => void }
+} 
+
 export function generateLinkedListFlow(list: LinkedList, offsetX = 0, offsetY = 0) {
 	const values = list.toArray();
 
-	const nodes = values.map((node, index) => ({
+	const nodes: FlowNode[] = values.map((node, index) => ({
 		id: `ll-${crypto.randomUUID()}`,
 		position: { x: offsetX + index * 150, y: offsetY },
 		type: 'linkedlistnode',

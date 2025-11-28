@@ -1,13 +1,9 @@
 import { Handle, Position } from 'reactflow';
 
-type AddNodeData = {
-	onAdd: () => void
-}
-
-export default function AddNode({ onAdd }) {
+export default function AddNode({ data }) {
 	return (
 		<div
-			onClick={onAdd}
+			onClick={data.onAdd}
 			style={{
 				width: 50,
 				height: 50,
